@@ -7,6 +7,6 @@ services:
     ports:
       - "8002:8002"
     volumes:
-      - /share/CACHEDEV1_DATA/hliblack/广播剧:/app/media:rw
+      - /share/CACHEDEV1_DATA/hliblack/音乐:/app/media:rw
       - /share/CACHEDEV1_DATA/Container/music_tag_web/config:/app/data
     restart: unless-stopped
