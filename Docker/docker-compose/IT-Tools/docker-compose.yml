@@ -1,0 +1,10 @@
+version: "3"
+services: 
+  it-tools: 
+    image: "docker.1ms.run/corentinth/it-tools" 
+    container_name: it-tools 
+    restart: unless-stopped 
+    ports: 
+      - "8181:80" 
+    volumes: 
+      - "/share/CACHEDEV1_DATA/Container/it-tools/data:/data"

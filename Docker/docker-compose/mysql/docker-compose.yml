@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: mysql:8.0.43-bookworm
+    volumes:
+      - /share/CACHEDEV1_DATA/Container/mysql_data:/var/lib/mysql
+      - /share/CACHEDEV1_DATA/Container/mysql_conf:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=DataGrip
+      - MYSQL_DATABASE=DataGrip
+      - MYSQL_USER=DataGrip
+      - MYSQL_PASSWORD=DataGrip
+    restart: unless-stopped
+    ports:
+      - 13306:3306
