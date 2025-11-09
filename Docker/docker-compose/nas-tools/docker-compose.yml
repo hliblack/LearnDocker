@@ -1,69 +1,90 @@
 version : "3" 
 services:  
-     jellyfin:    
-        image: nyanmisaka/jellyfin:latest
-        container_name: jellyfin    
-        environment:   
-         - PUID=1000  
-         - PGID=100   
-         - TZ=Asia/Shanghai    
-        volumes:      
-         - /share/CACHEDEV1_DATA/Container/jellyfin/config:/config      
-         - /share/CACHEDEV2_DATA/hliblack:/video
-        ports:     
-         - 8096:8096    
-         - 8920:8920   
-        devices:   
-         - /dev/dri:/dev/dri
-        restart: unless-stopped
-     nastool:
-        image: yohe/nastool:2.9.1
-        container_name: nastool
-        environment:   
-         - PUID=1000    
-         - PGID=100  
+   jellyfin:    
+      image: docker.1ms.run/nyanmisaka/jellyfin:latest
+      container_name: jellyfin    
+      environment:   
+      - PUID=1000  
+      - PGID=100   
+      - TZ=Asia/Shanghai    
+      volumes:      
+      - /share/CACHEDEV1_DATA/Container/jellyfin/config:/config      
+      - /share/CACHEDEV2_DATA/hliblack:/video
+      ports:     
+      - 8096:8096    
+      - 8920:8920   
+      devices:   
+      - /dev/dri:/dev/dri
+      restart: unless-stopped
+   nastool:
+      image: docker.1ms.run/yohe/nastool:2.9.1
+      container_name: nastool
+      environment:   
+      - PUID=1000    
+      - PGID=100  
+      - TZ=Asia/Shanghai
+      - ALPINE_MIRROR=mirrors.ustc.edu.cn
+      - LANG=C.UTF-8
+      - NASTOOL_AUTO_UPDATE=false
+      - NASTOOL_CN_UPDATE=true
+      - NASTOOL_CONFIG=/config/config.yaml
+      - NASTOOL_VERSION=master
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+      - REPO_URL=https://github.com/jxxghp/nas-tools.git
+      - UMASK=000
+      - WORKDIR=/nas-tools
+      volumes:      
+      - /share/CACHEDEV1_DATA/Container/nastool/config:/config      
+      - /share/CACHEDEV2_DATA/hliblack:/video
+      ports:     
+      - 3001:3000
+      restart: unless-stopped
+   jackett:
+      image: docker.1ms.run/linuxserver/jackett:latest
+      container_name: jackett
+      volumes:
+      - /share/CACHEDEV1_DATA/Container/jackett/config:/config
+      - /share/CACHEDEV2_DATA/hliblack/Container/jackett/downloads:/downloads
+      environment:   
+      - HOME=/root
+      - LSIO_FIRST_PARTY=true   
+      - PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+      - S6_STAGE2_HOOK=/docker-mods
+      - S6_VERBOSITY=1
+      - TERM=xterm
+      - VIRTUAL_ENV=/lsiopy
+      - XDG_CONFIG_HOME=/config
+      - XDG_DATA_HOME=/config
+      ports:     
+      - 9117:9117
+      restart: unless-stopped
+   flaresolverr:
+      image: docker.1ms.run/linuxserver/jackett:latest
+      container_name: flaresolverr
+      environment:
+         - LOG_LEVEL=info
          - TZ=Asia/Shanghai
-         - ALPINE_MIRROR=mirrors.ustc.edu.cn
-         - LANG=C.UTF-8
-         - NASTOOL_AUTO_UPDATE=false
-         - NASTOOL_CN_UPDATE=true
-         - NASTOOL_CONFIG=/config/config.yaml
-         - NASTOOL_VERSION=master
-         - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-         - PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
-         - REPO_URL=https://github.com/jxxghp/nas-tools.git
-         - UMASK=000
-         - WORKDIR=/nas-tools
-        volumes:      
-         - /share/CACHEDEV1_DATA/Container/nastool/config:/config      
-         - /share/CACHEDEV2_DATA/hliblack:/video
-        ports:     
-         - 3000:3000
-        restart: unless-stopped
-     jackett:
-        image: linuxserver/jackett:latest
-        container_name: jackett
-        volumes:
-         - /share/CACHEDEV1_DATA/Container/jackett/config:/config
-         - /share/CACHEDEV2_DATA/hliblack/Container/jackett/downloads:/downloads
-        environment:   
-         - HOME=/root
-         - LSIO_FIRST_PARTY=true   
-         - PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-         - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
-         - S6_STAGE2_HOOK=/docker-mods
-         - S6_VERBOSITY=1
-         - TERM=xterm
-         - VIRTUAL_ENV=/lsiopy
-         - XDG_CONFIG_HOME=/config
-         - XDG_DATA_HOME=/config
-        ports:     
-         - 9117:9117
-        restart: unless-stopped
-     flaresolverr:
-        image: flaresolverr/flaresolverr:latest
-        container_name: flaresolverr
-        environment:
-          - LOG_LEVEL=info
-         
+         - TEST_URL=https://www.baidu.com
+      ports:
+      - 8291:8191
+      restart: unless-stopped
+   qbittorrent:
+      image: lscr.io/linuxserver/qbittorrent:4.5.5
+      container_name: qbittorrent
+      environment:
+         - PUID=1000
+         - PGID=100
+         - TZ=Asia/Shanghai
+         - WEBUI_PORT=8080
+         - TORRENTING_PORT=16881
+      volumes:
+         - /share/CACHEDEV1_DATA/Container/qbittorrent/config:/config
+         - /share/hliblack:/downloads
+      ports:
+         - 8080:8080
+         - 16881:16881
+         - 16881:16881/udp
+      restart: unless-stopped
         
