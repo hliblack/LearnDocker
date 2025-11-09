@@ -1,65 +1,65 @@
 # Jenkins packaged by Bitnami
 
-## What is Jenkins?
+## 什么是 Jenkins？
 
-> Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
+> Jenkins 是一个开源的持续集成和持续交付（CI/CD）服务器，旨在自动化任何软件项目的构建、测试和部署。
 
-[Overview of Jenkins](http://jenkins-ci.org/)
-Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+[Jenkins 概述](http://jenkins-ci.org/)
+商标声明：此软件列表由 Bitnami 打包。产品中提到的相应商标归相应公司所有，使用这些商标并不意味着任何关联或认可。
 
-## TL;DR
+## 快速开始
 
 ```console
 curl -sSL https://raw.githubusercontent.com/bitnami/containers/main/bitnami/jenkins/docker-compose.yml > docker-compose.yml
 docker-compose up -d
 ```
 
-You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
+您可以在[环境变量](#environment-variables)部分找到默认凭据和可用的配置选项。
 
-## Why use Bitnami Images?
+## 为什么使用 Bitnami 镜像？
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading Linux distribution.
-* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+* Bitnami 密切跟踪上游源代码更改，并使用我们的自动化系统及时发布此镜像的新版本。
+* 使用 Bitnami 镜像，最新的错误修复和功能可以尽快获得。
+* Bitnami 容器、虚拟机和云镜像使用相同的组件和配置方法 - 使您可以根据项目需求轻松在不同格式之间切换。
+* 我们所有的镜像都基于 [minideb](https://github.com/bitnami/minideb)，这是一个极简的基于 Debian 的容器镜像，为您提供小型基础容器镜像和领先 Linux 发行版的熟悉感。
+* Docker Hub 中提供的所有 Bitnami 镜像都使用 [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/) 进行签名。您可以使用 `DOCKER_CONTENT_TRUST=1` 来验证镜像的完整性。
+* Bitnami 容器镜像定期发布，包含最新的发行版软件包。
 
-Looking to use Jenkins in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+想在生产环境中使用 Jenkins？试试 [VMware Tanzu Application Catalog](https://bitnami.com/enterprise)，这是 Bitnami Application Catalog 的企业版。
 
-## How to deploy Jenkins in Kubernetes?
+## 如何在 Kubernetes 中部署 Jenkins？
 
-Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Jenkins Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/jenkins).
+将 Bitnami 应用程序部署为 Helm Charts 是在 Kubernetes 上开始使用我们应用程序的最简单方法。在 [Bitnami Jenkins Chart GitHub 仓库](https://github.com/bitnami/charts/tree/master/bitnami/jenkins) 中阅读有关安装的更多信息。
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+Bitnami 容器可以与 [Kubeapps](https://kubeapps.dev/) 一起使用，用于在集群中部署和管理 Helm Charts。
 
-## Why use a non-root container?
+## 为什么使用非 root 容器？
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
+非 root 容器镜像增加了额外的安全层，通常建议用于生产环境。但是，因为它们以非 root 用户身份运行，特权任务通常是不允许的。在我们的文档中了解更多关于非 root 容器的信息[在我们的文档中](https://docs.bitnami.com/tutorials/work-with-non-root-containers/)。
 
-## Supported tags and respective `Dockerfile` links
+## 支持的标签和相应的 `Dockerfile` 链接
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/).
+在我们的文档页面中了解更多关于 Bitnami 标签策略以及滚动标签和不可变标签之间的区别[在我们的文档页面中](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/)。
 
-You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
+您可以通过查看分支文件夹中的 `tags-info.yaml` 文件来查看不同标签之间的等价关系，即 `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`。
 
-Subscribe to project updates by watching the [bitnami/containers GitHub repo](https://github.com/bitnami/containers).
+通过关注 [bitnami/containers GitHub 仓库](https://github.com/bitnami/containers) 订阅项目更新。
 
-## Get this image
+## 获取此镜像
 
-The recommended way to get the Bitnami Jenkins Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/jenkins).
+获取 Bitnami Jenkins Docker 镜像的推荐方法是从 [Docker Hub Registry](https://hub.docker.com/r/bitnami/jenkins) 拉取预构建的镜像。
 
 ```console
 docker pull bitnami/jenkins:latest
 ```
 
-To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://hub.docker.com/r/bitnami/jenkins/tags/) in the Docker Hub Registry.
+要使用特定版本，您可以拉取版本化标签。您可以在 Docker Hub Registry 中查看[可用版本列表](https://hub.docker.com/r/bitnami/jenkins/tags/)。
 
 ```console
 docker pull bitnami/jenkins:[TAG]
 ```
 
-If you wish, you can also build the image yourself by cloning the repository, changing to the directory containing the Dockerfile and executing the `docker build` command. Remember to replace the `APP`, `VERSION` and `OPERATING-SYSTEM` path placeholders in the example command below with the correct values.
+如果您愿意，也可以通过克隆仓库、切换到包含 Dockerfile 的目录并执行 `docker build` 命令来自己构建镜像。请记住在下面的示例命令中将 `APP`、`VERSION` 和 `OPERATING-SYSTEM` 路径占位符替换为正确的值。
 
 ```console
 git clone https://github.com/bitnami/containers.git
@@ -67,28 +67,28 @@ cd bitnami/APP/VERSION/OPERATING-SYSTEM
 docker build -t bitnami/APP:latest .
 ```
 
-## How to use this image
+## 如何使用此镜像
 
-### Using Docker Compose
+### 使用 Docker Compose
 
-The main folder of this repository contains a functional [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) file. Run the application using it as shown below:
+此仓库的主文件夹包含一个功能性的 [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) 文件。如下所示使用它运行应用程序：
 
 ```console
 curl -sSL https://raw.githubusercontent.com/bitnami/containers/main/bitnami/jenkins/docker-compose.yml > docker-compose.yml
 docker-compose up -d
 ```
 
-### Using the Docker Command Line
+### 使用 Docker 命令行
 
-If you want to run the application manually instead of using `docker-compose`, these are the basic steps you need to run:
+如果您想手动运行应用程序而不是使用 `docker-compose`，这些是您需要运行的基本步骤：
 
-#### Step 1: Create a network
+#### 步骤 1：创建网络
 
 ```console
 docker network create jenkins-network
 ```
 
-#### Step 2: Create volumes for Jenkins persistence and launch the container
+#### 步骤 2：为 Jenkins 持久化创建卷并启动容器
 
 ```console
 $ docker volume create --name jenkins_data
@@ -98,19 +98,19 @@ docker run -d -p 80:8080 --name jenkins \
   bitnami/jenkins:latest
 ```
 
-Access your application at `http://your-ip/`
+在 `http://your-ip/` 访问您的应用程序
 
-## Persisting your application
+## 持久化您的应用程序
 
-If you remove the container all your data and configurations will be lost, and the next time you run the image the database will be reinitialized. To avoid this loss of data, you should mount a volume that will persist even after the container is removed.
+如果您删除容器，所有数据和配置都将丢失，下次运行镜像时数据库将重新初始化。为避免这种数据丢失，您应该挂载一个即使在容器被删除后仍会持久存在的卷。
 
-For persistence you should mount a volume at the `/bitnami/jenkins` path. The above examples define a docker volume namely `jenkins_data`. The Jenkins application state will persist as long as this volume is not removed.
+对于持久化，您应该在 `/bitnami/jenkins` 路径挂载一个卷。上面的示例定义了一个名为 `jenkins_data` 的 docker 卷。只要不删除此卷，Jenkins 应用程序状态就会持久存在。
 
-To avoid inadvertent removal of this volume you can [mount host directories as data volumes](https://docs.docker.com/engine/tutorials/dockervolumes/). Alternatively you can make use of volume plugins to host the volume data.
+为避免意外删除此卷，您可以[将主机目录挂载为数据卷](https://docs.docker.com/engine/tutorials/dockervolumes/)。或者，您可以使用卷插件来托管卷数据。
 
-### Mount host directories as data volumes with Docker Compose
+### 使用 Docker Compose 将主机目录挂载为数据卷
 
-This requires a minor change to the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) file present in this repository:
+这需要对此仓库中存在的 [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) 文件进行小幅更改：
 
 ```diff
   ...
@@ -125,17 +125,17 @@ This requires a minor change to the [`docker-compose.yml`](https://github.com/bi
 -     driver: local
 ```
 
-> NOTE: As this is a non-root container, the mounted files and directories must have the proper permissions for the UID `1001`.
+> 注意：由于这是一个非 root 容器，挂载的文件和目录必须具有 UID `1001` 的适当权限。
 
-### Mount host directories as data volumes using the Docker command line
+### 使用 Docker 命令行将主机目录挂载为数据卷
 
-#### Step 1: Create a network (if it does not exist)
+#### 步骤 1：创建网络（如果不存在）
 
 ```console
 docker network create jenkins-network
 ```
 
-#### Step 2. Create the Jenkins container with host volumes
+#### 步骤 2. 使用主机卷创建 Jenkins 容器
 
 ```console
 docker run -d -p 80:8080 --name jenkins \
@@ -144,13 +144,13 @@ docker run -d -p 80:8080 --name jenkins \
   bitnami/jenkins:latest
 ```
 
-## Configuration
+## 配置
 
-### Environment variables
+### 环境变量
 
-When you start the Jenkins image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
+当您启动 Jenkins 镜像时，可以通过在 docker-compose 文件或 `docker run` 命令行上传递一个或多个环境变量来调整实例的配置。如果您想添加新的环境变量：
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) file present in this repository:
+* 对于 docker-compose，在此仓库中存在的 [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/jenkins/docker-compose.yml) 文件的应用程序部分下添加变量名和值：
 
     ```yaml
     jenkins:
@@ -160,7 +160,7 @@ When you start the Jenkins image, you can adjust the configuration of the instan
       ...
     ```
 
-* For manual execution add a `--env` option with each variable and value:
+* 对于手动执行，为每个变量和值添加一个 `--env` 选项：
 
     ```console
     $ docker run -d -p 80:8080 --name jenkins \
@@ -170,65 +170,65 @@ When you start the Jenkins image, you can adjust the configuration of the instan
       bitnami/jenkins:latest
     ```
 
-Available environment variables:
+可用环境变量：
 
-#### User and Site configuration
+#### 用户和站点配置
 
-* `JENKINS_USERNAME`: Jenkins admin username. Default: **user**
-* `JENKINS_PASSWORD`: Jenkins admin password. Default: **bitnami**
-* `JENKINS_EMAIL`: Jenkins admin email. Default: **user@example.com**
-* `JENKINS_HOME`: Jenkins home directory. Default: **/bitnami/jenkins/home**
-* `JENKINS_HTTP_PORT_NUMBER`: Port used by Jenkins for HTTP. Default: **8080**
-* `JENKINS_HTTPS_PORT_NUMBER`: Port used by Jenkins for HTTPS. Default: **8443**
-* `JENKINS_EXTERNAL_HTTP_PORT_NUMBER`: Port to used by Jenkins to generate URLs and links when accessing using HTTP. Default: **80**
-* `JENKINS_EXTERNAL_HTTPS_PORT_NUMBER`: Port to used by Jenkins to generate URLs and links when accessing using HTTPS. Default: **443**
-* `JENKINS_JNLP_PORT_NUMBER`: Port used by Jenkins for JNLP. Default: **50000**
-* `JENKINS_FORCE_HTTPS`: Enable serving Jenkins only through HTTPS. Default: **no**
-* `JENKINS_SKIP_BOOTSTRAP`: Skip performing the initial bootstrapping. Default: **no**
+* `JENKINS_USERNAME`: Jenkins 管理员用户名。默认值：**user**
+* `JENKINS_PASSWORD`: Jenkins 管理员密码。默认值：**bitnami**
+* `JENKINS_EMAIL`: Jenkins 管理员邮箱。默认值：**user@example.com**
+* `JENKINS_HOME`: Jenkins 主目录。默认值：**/bitnami/jenkins/home**
+* `JENKINS_HTTP_PORT_NUMBER`: Jenkins 用于 HTTP 的端口。默认值：**8080**
+* `JENKINS_HTTPS_PORT_NUMBER`: Jenkins 用于 HTTPS 的端口。默认值：**8443**
+* `JENKINS_EXTERNAL_HTTP_PORT_NUMBER`: Jenkins 在使用 HTTP 访问时用于生成 URL 和链接的端口。默认值：**80**
+* `JENKINS_EXTERNAL_HTTPS_PORT_NUMBER`: Jenkins 在使用 HTTPS 访问时用于生成 URL 和链接的端口。默认值：**443**
+* `JENKINS_JNLP_PORT_NUMBER`: Jenkins 用于 JNLP 的端口。默认值：**50000**
+* `JENKINS_FORCE_HTTPS`: 仅通过 HTTPS 提供 Jenkins 服务。默认值：**no**
+* `JENKINS_SKIP_BOOTSTRAP`: 跳过执行初始引导。默认值：**no**
 
-#### JAVA configuration
+#### JAVA 配置
 
-* `JAVA_OPTS`: Customize JVM parameters. No defaults.
+* `JAVA_OPTS`: 自定义 JVM 参数。无默认值。
 
-## Logging
+## 日志记录
 
-The Bitnami Jenkins Docker image sends the container logs to `stdout`. To view the logs:
+Bitnami Jenkins Docker 镜像将容器日志发送到 `stdout`。要查看日志：
 
 ```console
 docker logs jenkins
 ```
 
-Or using Docker Compose:
+或使用 Docker Compose：
 
 ```console
 docker-compose logs jenkins
 ```
 
-You can configure the containers [logging driver](https://docs.docker.com/engine/admin/logging/overview/) using the `--log-driver` option if you wish to consume the container logs differently. In the default configuration docker uses the `json-file` driver.
+如果您希望以不同方式使用容器日志，可以使用 `--log-driver` 选项配置容器的[日志驱动程序](https://docs.docker.com/engine/admin/logging/overview/)。在默认配置中，docker 使用 `json-file` 驱动程序。
 
-## Maintenance
+## 维护
 
-### Backing up your container
+### 备份您的容器
 
-To backup your data, configuration and logs, follow these simple steps:
+要备份您的数据、配置和日志，请按照以下简单步骤操作：
 
-#### Step 1: Stop the currently running container
+#### 步骤 1：停止当前运行的容器
 
-* For docker-compose: `$ docker-compose stop jenkins`
-* For manual execution: `$ docker stop jenkins`
+* 对于 docker-compose：`$ docker-compose stop jenkins`
+* 对于手动执行：`$ docker stop jenkins`
 
-#### Step 2: Run the backup command
+#### 步骤 2：运行备份命令
 
-We need to mount two volumes in a container we will use to create the backup: a directory on your host to store the backup in, and the volumes from the container we just stopped so we can access the data.
+我们需要在用于创建备份的容器中挂载两个卷：主机上的一个目录用于存储备份，以及我们刚刚停止的容器的卷，以便我们可以访问数据。
 
 ```console
 docker run --rm -v /path/to/jenkins-backups:/backups --volumes-from jenkins bitnami/os-shell \
   cp -a /bitnami/jenkins /backups/latest
 ```
 
-### Restoring a backup
+### 恢复备份
 
-Restoring a backup is as simple as mounting the backup as volumes in the containers.
+恢复备份就像在容器中将备份挂载为卷一样简单。
 
 ```diff
  $ docker run -d --name jenkins \
@@ -238,42 +238,42 @@ Restoring a backup is as simple as mounting the backup as volumes in the contain
    bitnami/jenkins:latest
 ```
 
-### Upgrading Jenkins
+### 升级 Jenkins
 
-Bitnami provides up-to-date versions of Jenkins, including security patches, soon after they are made upstream. We recommend that you follow these steps to upgrade your container. We will cover here the upgrade of the Jenkins container.
+Bitnami 提供 Jenkins 的最新版本，包括安全补丁，在上游发布后不久就会发布。我们建议您按照以下步骤升级容器。我们将在这里介绍 Jenkins 容器的升级。
 
-### Step 1. Get the updated images
+### 步骤 1. 获取更新的镜像
 
 ```console
 docker pull bitnami/jenkins:latest
 ```
 
-### Step 2. Stop your container
+### 步骤 2. 停止您的容器
 
-* For docker-compose: `$ docker-compose stop jenkins`
-* For manual execution: `$ docker stop jenkins`
+* 对于 docker-compose：`$ docker-compose stop jenkins`
+* 对于手动执行：`$ docker stop jenkins`
 
-### Step 3. Take a snapshot of the application state
+### 步骤 3. 拍摄应用程序状态的快照
 
-Follow the steps in [Backing up your container](#backing-up-your-container) to take a snapshot of the current application state.
+按照[备份您的容器](#backing-up-your-container)中的步骤拍摄当前应用程序状态的快照。
 
-### Step 4. Remove the stopped container
+### 步骤 4. 删除已停止的容器
 
-* For docker-compose: `$ docker-compose rm -v jenkins`
-* For manual execution: `$ docker rm -v jenkins`
+* 对于 docker-compose：`$ docker-compose rm -v jenkins`
+* 对于手动执行：`$ docker rm -v jenkins`
 
-### Step 5. Run the new image
+### 步骤 5. 运行新镜像
 
-* For docker-compose: `$ docker-compose up jenkins`
-* For manual execution (mount the directories if needed): `docker run --name jenkins bitnami/jenkins:latest`
+* 对于 docker-compose：`$ docker-compose up jenkins`
+* 对于手动执行（如果需要，挂载目录）：`docker run --name jenkins bitnami/jenkins:latest`
 
-## Customize this image
+## 自定义此镜像
 
-For customizations, please note that this image is, by default, a non-root container using the user `jenkins` with `uid=1001`.
+对于自定义，请注意此镜像默认是一个使用 `uid=1001` 的 `jenkins` 用户的非 root 容器。
 
-### Extend this image
+### 扩展此镜像
 
-To extend the bitnami original image, you can create your own image using a Dockerfile with the format below:
+要扩展 bitnami 原始镜像，您可以使用以下格式的 Dockerfile 创建自己的镜像：
 
 ```Dockerfile
 FROM bitnami/jenkins
@@ -281,9 +281,9 @@ FROM bitnami/jenkins
 ...
 ```
 
-Here is an example of extending the image with the following modifications:
+以下是一个扩展镜像的示例，包含以下修改：
 
-* Install the `vim` editor
+* 安装 `vim` 编辑器
 
 ```Dockerfile
 FROM bitnami/jenkins
@@ -296,23 +296,23 @@ RUN install_packages vim
 USER 1001
 ```
 
-### Installing plugins
+### 安装插件
 
-To download and install a set of plugins and their dependencies, use the [Plugin Installation Manager tool](https://github.com/jenkinsci/plugin-installation-manager-tool). You can find information about how to use this tool in the guide below:
+要下载并安装一组插件及其依赖项，请使用 [Plugin Installation Manager tool](https://github.com/jenkinsci/plugin-installation-manager-tool)。您可以在以下指南中找到有关如何使用此工具的信息：
 
-* [Getting Started with Plugin Installation Manager tool](https://github.com/jenkinsci/plugin-installation-manager-tool#getting-started)
+* [Plugin Installation Manager tool 入门](https://github.com/jenkinsci/plugin-installation-manager-tool#getting-started)
 
-Alternatively, it is possible to install plugins using the following env variables:
+或者，可以使用以下环境变量安装插件：
 
-* `JENKINS_PLUGINS`: Comma-separated list of Jenkins plugins to be installed during the first boot.
-* `JENKINS_PLUGINS_LATEST`: If set to false, install the minimum required version of the plugins in `JENKINS_PLUGINS`. Default: **true**
-* `JENKINS_PLUGINS_LATEST_SPECIFIED`: If set to true, install the latest dependencies of any plugin that is requested to have the latest version. Default: **false**
-* `JENKINS_OVERRIDE_PLUGINS`: If set to true, existing plugins in the persisted volume will be removed and will force plugins to be reinstalled. Default: **false**
-* `JENKINS_SKIP_IMAGE_PLUGINS`: If set to true, skip the installation of image built-in plugins. Default: **false**
+* `JENKINS_PLUGINS`: 在首次启动时要安装的 Jenkins 插件的逗号分隔列表。
+* `JENKINS_PLUGINS_LATEST`: 如果设置为 false，则安装 `JENKINS_PLUGINS` 中插件的最低必需版本。默认值：**true**
+* `JENKINS_PLUGINS_LATEST_SPECIFIED`: 如果设置为 true，则安装任何请求最新版本的插件的最新依赖项。默认值：**false**
+* `JENKINS_OVERRIDE_PLUGINS`: 如果设置为 true，将删除持久卷中的现有插件，并强制重新安装插件。默认值：**false**
+* `JENKINS_SKIP_IMAGE_PLUGINS`: 如果设置为 true，则跳过镜像内置插件的安装。默认值：**false**
 
-### Passing JVM parameters
+### 传递 JVM 参数
 
-You might need to customize the JVM running Jenkins, typically to pass system properties or to tweak heap memory settings. Use the `JAVA_OPTS` environment variable for this purpose:
+您可能需要自定义运行 Jenkins 的 JVM，通常是为了传递系统属性或调整堆内存设置。为此目的使用 `JAVA_OPTS` 环境变量：
 
 ```console
 docker run -d --name jenkins -p 80:8080 \
@@ -320,9 +320,9 @@ docker run -d --name jenkins -p 80:8080 \
   bitnami/jenkins:latest
 ```
 
-### Using custom launcher parameters
+### 使用自定义启动器参数
 
-In order to use custom parameters for Jenkins launcher, for example if you need to install Jenkins behind a reverse proxy with a prefix such as mycompany.com/jenkins, you can use the "JENKINS_OPTS" environment variable:
+为了使用 Jenkins 启动器的自定义参数，例如，如果您需要在反向代理后面安装 Jenkins，前缀为 mycompany.com/jenkins，您可以使用 "JENKINS_OPTS" 环境变量：
 
 ```console
 docker run -d --name jenkins -p 8080:8080 \
@@ -330,24 +330,24 @@ docker run -d --name jenkins -p 8080:8080 \
   bitnami/jenkins:latest
 ```
 
-### Skipping Bitnami initialization
+### 跳过 Bitnami 初始化
 
-By default, when running this image, Bitnami implement some logic in order to configure it for working out of the box. This initialization consists of creating the user and password, preparing data to persist, configuring permissions, creating the `JENKINS_HOME`, etc. You can skip it in two ways:
+默认情况下，运行此镜像时，Bitnami 会实现一些逻辑以配置它以便开箱即用。此初始化包括创建用户和密码、准备要持久化的数据、配置权限、创建 `JENKINS_HOME` 等。您可以通过两种方式跳过它：
 
-* Setting the `JENKINS_SKIP_BOOTSTRAP` environment variable to `yes`.
-* Attaching a volume with a custom `JENKINS_HOME` that contains a functional Jenkins installation.
+* 将 `JENKINS_SKIP_BOOTSTRAP` 环境变量设置为 `yes`。
+* 附加一个包含功能完整的 Jenkins 安装的自定义 `JENKINS_HOME` 的卷。
 
-### Adding files/directories to the image
+### 向镜像添加文件/目录
 
-You can include files to the image automatically. All files/directories located in `/usr/share/jenkins/ref` are copied to `/bitnami/jenkins/home` (default Jenkins home directory).
+您可以自动将文件包含到镜像中。位于 `/usr/share/jenkins/ref` 的所有文件/目录都会复制到 `/bitnami/jenkins/home`（默认 Jenkins 主目录）。
 
-#### Examples
+#### 示例
 
-##### Run groovy scripts at Jenkins start up
+##### 在 Jenkins 启动时运行 groovy 脚本
 
-You can create custom groovy scripts and make Jenkins run them at start up.
+您可以创建自定义 groovy 脚本并让 Jenkins 在启动时运行它们。
 
-However, using this feature will disable the default configuration done by the Bitnami scripts. This is intended to customize the Jenkins configuration by code.
+但是，使用此功能将禁用 Bitnami 脚本完成的默认配置。这旨在通过代码自定义 Jenkins 配置。
 
 ```console
 $ mkdir jenkins-init.groovy.d
@@ -364,9 +364,9 @@ $ docker logs jenkins | grep world
 --> bye world!
 ```
 
-##### Run custom `config.xml`
+##### 运行自定义 `config.xml`
 
-You can use your our own `config.xml` file. However, using this feature will disable the default configuration generated by the Bitnami scripts. This is intended to customize the Jenkins configuration by code.
+您可以使用自己的 `config.xml` 文件。但是，使用此功能将禁用 Bitnami 脚本生成的默认配置。这旨在通过代码自定义 Jenkins 配置。
 
 ```console
 docker run -d -p 80:8080 --name jenkins \
@@ -375,61 +375,61 @@ docker run -d -p 80:8080 --name jenkins \
   bitnami/jenkins:latest
 ```
 
-> NOTE: The default `admin` user with this setup will not be created. It should be done separately.
+> 注意：使用此设置，默认的 `admin` 用户将不会被创建。应该单独完成。
 
-## Notable Changes
+## 重要变更
 
 ### 2.346.3-debian-11-r3
 
-* The preinstalled plugins were removed.
+* 移除了预安装的插件。
 
 ### 2.332.2-debian-10-r21
 
-* HTTPS and HTTP support are enabled by default.
-* `JENKINS_ENABLE_HTTPS` has been renamed to `JENKINS_FORCE_HTTPS`.
+* 默认启用 HTTPS 和 HTTP 支持。
+* `JENKINS_ENABLE_HTTPS` 已重命名为 `JENKINS_FORCE_HTTPS`。
 
 ### 2.277.4-debian-10-r19
 
-* The size of the container image has been decreased.
-* The configuration logic is now based on Bash scripts in the *rootfs/* folder.
-* Only the Jenkins Home directory is persisted.
-* The `install-plugins.sh` script has been deprecated. Instead use the Plugin Installation Manager Tool as explained in the [Installing Plugins](#installing-plugins) section.
-* The `DISABLE_JENKINS_INITIALIZATION` environment variable was renamed to `JENKINS_SKIP_BOOTSTRAP`.
+* 容器镜像的大小已减小。
+* 配置逻辑现在基于 *rootfs/* 文件夹中的 Bash 脚本。
+* 仅持久化 Jenkins Home 目录。
+* `install-plugins.sh` 脚本已被弃用。相反，请使用 [安装插件](#installing-plugins) 部分中说明的 Plugin Installation Manager Tool。
+* `DISABLE_JENKINS_INITIALIZATION` 环境变量已重命名为 `JENKINS_SKIP_BOOTSTRAP`。
 
 ### 2.263.3-debian-10-rXX
 
-* The deprecated plugins below are not included in the image by default anymore:
-  * [GitHub Organization Folder](https://plugins.jenkins.io/github-organization-folder).
-  * [Pipeline: Declarative Agent API](https://plugins.jenkins.io/pipeline-model-declarative-agent).
+* 以下已弃用的插件不再默认包含在镜像中：
+  * [GitHub Organization Folder](https://plugins.jenkins.io/github-organization-folder)。
+  * [Pipeline: Declarative Agent API](https://plugins.jenkins.io/pipeline-model-declarative-agent)。
 
 ### 2.222.1-debian-10-r17
 
-* Java distribution has been migrated from AdoptOpenJDK to OpenJDK Liberica. As part of VMware, we have an agreement with Bell Software to distribute the Liberica distribution of OpenJDK. That way, we can provide support & the latest versions and security releases for Java.
+* Java 发行版已从 AdoptOpenJDK 迁移到 OpenJDK Liberica。作为 VMware 的一部分，我们与 Bell Software 达成协议，分发 OpenJDK 的 Liberica 发行版。这样，我们可以为 Java 提供支持和最新版本以及安全版本。
 
 ### 2.204.4-debian-10-r3
 
-* The Jenkins container has been migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Jenkins service was started as the `jenkins` user. From now on, both the container and the Jenkins service run as user `jenkins` (`uid=1001`). You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
-* Consequences:
-  * Backwards compatibility is not guaranteed when data is persisted using docker or docker-compose. We highly recommend migrating your Jenkins data ensuring the `jenkins` user has the appropriate permissions.
-  * No "privileged" actions are allowed anymore.
+* Jenkins 容器已迁移到"非 root"用户方法。以前，容器以 `root` 用户身份运行，Jenkins 服务以 `jenkins` 用户身份启动。从现在开始，容器和 Jenkins 服务都以用户 `jenkins`（`uid=1001`）运行。您可以通过在 Dockerfile 中将 `USER 1001` 更改为 `USER root` 来恢复此行为。
+* 后果：
+  * 当使用 docker 或 docker-compose 持久化数据时，不保证向后兼容性。我们强烈建议迁移您的 Jenkins 数据，确保 `jenkins` 用户具有适当的权限。
+  * 不再允许"特权"操作。
 
 ### 2.121.2-ol-7-r14 / 2.121.2-debian-9-r18
 
-* Use Jetty instead of Tomcat as web server.
+* 使用 Jetty 而不是 Tomcat 作为 Web 服务器。
 
 ### 2.107.1-r0
 
-* The Jenkins container has been migrated to the LTS version. From now on, this repository will only track long term support releases from [Jenkins](https://jenkins.io/changelog-stable/).
+* Jenkins 容器已迁移到 LTS 版本。从现在开始，此仓库将仅跟踪来自 [Jenkins](https://jenkins.io/changelog-stable/) 的长期支持版本。
 
-## Contributing
+## 贡献
 
-We'd love for you to contribute to this container. You can request new features by creating an [issue](https://github.com/bitnami/containers/issues) or submitting a [pull request](https://github.com/bitnami/containers/pulls) with your contribution.
+我们很乐意让您为这个容器做出贡献。您可以通过创建 [issue](https://github.com/bitnami/containers/issues) 或提交 [pull request](https://github.com/bitnami/containers/pulls) 来请求新功能。
 
-## Issues
+## 问题
 
-If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/containers/issues/new/choose). For us to provide better support, be sure to fill the issue template.
+如果您在运行此容器时遇到问题，可以提交 [issue](https://github.com/bitnami/containers/issues/new/choose)。为了我们能够提供更好的支持，请务必填写问题模板。
 
-## License
+## 许可证
 
 Copyright &copy; 2023 VMware, Inc.
 
