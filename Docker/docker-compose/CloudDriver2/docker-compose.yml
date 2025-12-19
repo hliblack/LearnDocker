@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  cloudnas:
+    image: 12def0d3c33cad30908dc541c612a680.d.1ms.run/cloudnas/clouddrive2:0.9.17
+    container_name: clouddrive2
+    environment:
+       - TZ=Asia/Shanghai
+       - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - /share/CACHEDEV2_DATA/hliblack/CloudDriver2:/CloudNAS:shared
+      - /share/CACHEDEV1_DATA/Container/CloudDriver2/config:/Config
+    devices:
+      - /dev/fuse:/dev/fuse
+    restart: unless-stopped
+    privileged: true #or you can try capp_add -SYS_ADMIN
+    #cap_add: #SYS_ADMIN cap may fail on some OSes, use privileged: true instead
+    # - SYS_ADMIN
+    # network_mode: "host" #if network_mode doesn't work, use port mapping
+    ports:
+      - 19798:19798
