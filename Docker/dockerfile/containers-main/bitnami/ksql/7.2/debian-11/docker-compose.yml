@@ -5,7 +5,7 @@ version: '2'
 
 services:
   kafka:
-    image: docker.io/bitnami/kafka:3.4
+    image: docker.io/soldevelo/kafka:3.4
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=0
