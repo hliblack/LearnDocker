@@ -1,0 +1,19 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:<version>-ee.0
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab.example.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # 在这里添加任何其他 gitlab.rb 配置，每行一个
+        external_url 'https://gitlab.example.com'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '22:22'
+    volumes:
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
+    shm_size: '256m'

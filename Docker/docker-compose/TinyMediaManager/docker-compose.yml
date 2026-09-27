@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  tinymediamanager:
+    image: mmhdavu55jr8wl.xuanyuan.run/tinymediamanager/tinymediamanager:latest
+    container_name: tinymediamanager
+    restart: unless-stopped
+    ports:
+      - "4000:4000"   # noVNC Web 访问端口
+      - "5900:5900"   # VNC 端口，可选
+    environment:
+      - USER_ID=1000          # 替换成你的用户 ID，用 id 命令查看
+      - GROUP_ID=1000         # 替换成你的组 ID
+      - TZ=Asia/Shanghai
+      # - VNC_PASSWORD=你的密码   # 可选，设置后访问需要密码
+      # - DISPLAY_WIDTH=1280
+      # - DISPLAY_HEIGHT=720
+
+    volumes:
+      - /share/Container/tinymediamanager/config:/config
+      - /share/hliblack/电影:/movies
+      - /share/hliblack/电视剧:/tvshows
+      - /share/hliblack/动画:/animation

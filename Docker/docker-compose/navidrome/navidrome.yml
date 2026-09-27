@@ -1,7 +1,7 @@
 # NAS音乐管理
 services:
   navidrome:
-    image: docker.m.daocloud.io/deluan/navidrome:latest
+    image: mmhdavu55jr8wl.xuanyuan.run/deluan/navidrome:latest
     user: 1000:100 # should be owner of volumes
     ports:
       - "4533:4533"

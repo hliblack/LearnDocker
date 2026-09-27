@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   cloudnas:
-    image: 12def0d3c33cad30908dc541c612a680.d.1ms.run/cloudnas/clouddrive2:0.9.17
+    image: mmhdavu55jr8wl.xuanyuan.run/cloudnas/clouddrive2:latest
     container_name: clouddrive2
     environment:
        - TZ=Asia/Shanghai

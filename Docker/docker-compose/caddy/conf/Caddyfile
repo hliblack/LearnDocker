@@ -1,0 +1,10 @@
+{
+  email hliblack@qq.com
+}
+
+# 本地站点 - 同时支持 localhost 和 www.hyouka.top
+:80 {
+  root * /srv/hliblack.github.io
+  file_server
+  encode gzip
+}

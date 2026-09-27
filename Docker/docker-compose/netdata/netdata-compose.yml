@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  netdata:
+    image: netdata/netdata:stable
+    container_name: netdata
+    restart: unless-stopped
+    network_mode: host  # 🌟 更优：避免端口映射开销，直接监听宿主机网络（推荐）
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    environment:
+      - NETDATA_UID=0
+      - NETDATA_GID=0
+      - TZ=Asia/Shanghai  # 根据实际时区调整
+      - DOCKER_HOST=unix:///host/var/run/docker.sock
+      - NETDATA_CLOUD_DISABLE=1
+      - NETDATA_CLOUD_BACKEND=off
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/netdata:/var/lib/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /etc/netdata:/etc/netdata  # 👈 挂载自定义配置目录（首次启动后自动生成）
+    security_opt:
+      - apparmor:unconfined

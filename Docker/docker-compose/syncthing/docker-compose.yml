@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   syncthing:
-    image: syncthing/syncthing:latest
+    image: mmhdavu55jr8wl.xuanyuan.run/syncthing/syncthing:latest
     container_name: syncthing
     restart: unless-stopped
     ports:
@@ -10,34 +10,34 @@ services:
       - 22000:22000/udp # QUIC file transfers
       # - 21027:21027/udp # Receive local discovery broadcasts
     environment:
-      - PUID=0
-      - PGID=0
+      - PUID=1000
+      - PGID=1000
       - TZ=Asia/Shanghai
     volumes:
-      - /mnt/syncthing:/config
-      - /mnt/syncthing/data:/data
+      - /share/Container/syncthing/config:/config
+      - /share/hliblack:/data
   # 自建syncthing发现服务器
   syncthing-discovery:
-    image: syncthing/discosrv:latest
+    image: mmhdavu55jr8wl.xuanyuan.run/syncthing/discosrv:latest
     container_name: syncthing-discovery
     restart: unless-stopped
     environment:
-      - PUID=0
-      - PGID=0
+      - PUID=1000
+      - PGID=1000
       - TZ=Asia/Shanghai
     volumes:
-      - /mnt/syncthing-discovery:/config
+      - /share/Container/syncthing-discovery/config:/config
     ports:
       - 8443:8443
   # 自建中继服务器
   syncthing-relay:
-    image: syncthing/relaysrv:latest
+    image: mmhdavu55jr8wl.xuanyuan.run/syncthing/relaysrv:latest
     container_name: syncthing-relay
     restart: unless-stopped
     environment:
-      - PUID=0
-      - PGID=0
+      - PUID=1000
+      - PGID=1000
     volumes:
-      - /mnt/syncthing/relay:/config
+      - /share/Container/syncthing/relay/config:/config
     ports:
       - 22067:22067

@@ -10,9 +10,10 @@ services:
       - '81:8080'
       - '4431:443'
     environment:
-      - JENKINS_EMAIL=hliblack@163.com
-      - JENKINS_USERNAME=admin
-      - JENKINS_PASSWORD=admin
+      # 敏感配置移至 .env 文件（参考 .env.example，.env 已加入 .gitignore）
+      - JENKINS_EMAIL=${JENKINS_EMAIL}
+      - JENKINS_USERNAME=${JENKINS_USERNAME}
+      - JENKINS_PASSWORD=${JENKINS_PASSWORD}
       - JENKINS_HTTP_PORT_NUMBER=8080
       - JENKINS_HTTPS_PORT_NUMBER=8443
       # - JENKINS_EXTERNAL_HTTP_PORT_NUMBER=8080

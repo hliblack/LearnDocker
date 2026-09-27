@@ -5,10 +5,11 @@ services:
       - /share/CACHEDEV1_DATA/Container/mysql_data:/var/lib/mysql
       - /share/CACHEDEV1_DATA/Container/mysql_conf:/etc/mysql/conf.d
     environment:
-      - MYSQL_ROOT_PASSWORD=DataGrip
-      - MYSQL_DATABASE=DataGrip
-      - MYSQL_USER=DataGrip
-      - MYSQL_PASSWORD=DataGrip
+      # 敏感配置移至 .env 文件（参考 .env.example，.env 已加入 .gitignore）
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: unless-stopped
     ports:
       - 13306:3306

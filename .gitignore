@@ -23,3 +23,17 @@ build
 
 # syncthing
 .stfolder/
+
+# specstory
+.specstory/
+
+# 敏感信息：env 文件与集群证书
+.env
+!.env.example
+kubecfg.crt
+kubecfg.key
+kubecfg.p12
+
+# 第三方仓库快照（体积大，按需自行浅克隆，见 README）
+Docker/dockerfile/containers-main/
+K8s/charts-main/

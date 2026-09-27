@@ -11,4 +11,5 @@ services:
       - 445:445
     volumes:
       - /share/hliblack:/mount
-    command: '-u "name;pass." -s "share;/mount/;yes;yes;yes;all;none" -s "public;/mount/;yes;no;no;all;none"'
+    # 账号密码移至 .env 文件（参考 .env.example，.env 已加入 .gitignore）
+    command: '-u "${SMB_USER};${SMB_PASSWORD}" -s "share;/mount/;yes;yes;yes;all;none" -s "public;/mount/;yes;no;no;all;none"'
