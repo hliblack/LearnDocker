@@ -63,7 +63,7 @@ git clone --depth 1 https://github.com/bitnami/charts.git K8s/charts-main
 
 ```bash
 # 1 控制面 + 3 worker
-kind create cluster --config K8s/kind-4nodes.yaml
+kind create cluster --config K8s/kind/kind-4nodes.yaml
 
 # 高可用集群（多控制面 + 端口映射）
 kind create cluster --config K8s/kind/kind-ha.yaml
@@ -76,14 +76,15 @@ kind get clusters
 kind delete cluster --name kind-ha
 ```
 
-可用集群配置：
+可用集群配置（全部位于 `K8s/kind/`）：
 
 | 文件 | 拓扑 |
 |---|---|
-| [K8s/kind-4nodes.yaml](K8s/kind-4nodes.yaml) | 1 控制面 + 3 worker（最简） |
+| [K8s/kind/kind-4nodes.yaml](K8s/kind/kind-4nodes.yaml) | 1 控制面 + 3 worker（最简） |
 | [K8s/kind/kind-ha.yaml](K8s/kind/kind-ha.yaml) | 2 控制面 + 3 worker（多控制面） |
 | [K8s/kind/kind-config-single.yaml](K8s/kind/kind-config-single.yaml) | 单节点 + 80/443 映射 |
 | [K8s/kind/kind-config-registry.yaml](K8s/kind/kind-config-registry.yaml) | 本地镜像仓库 + 2 worker |
+| [K8s/kind/kind-mirror.yaml](K8s/kind/kind-mirror.yaml) | 镜像加速模板 + 3 worker |
 | [K8s/kind/kind-test.yaml](K8s/kind/kind-test.yaml) | 自定义网段 / ipvs / 固定 API 端口 |
 
 ### 基础对象

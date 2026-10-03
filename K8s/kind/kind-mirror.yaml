@@ -1,0 +1,66 @@
+# ============================================================================
+# kind 集群配置：镜像加速（containerd registry mirror）
+#
+# 用途：节点内拉取 Docker Hub 镜像缓慢时，通过 containerd 配置镜像加速
+# 使用：kind create cluster --config kind-mirror.yaml
+#
+# ── 本文件由根目录 K8s/kind-test.yaml 收拢并重写，两处改动：─────────────
+#   ① 原加速地址 https://0ebrf618.mirror.aliyuncs.com 是「阿里云容器镜像
+#      服务」的账号专属地址（形如 <随机串>.mirror.aliyuncs.com），随账号与
+#      时间失效，现已注释掉，请按下方说明替换为有效地址。
+#   ② 原文件把四个节点镜像全部钉在 kindest/node:v1.27.3，与当前 kind
+#      v0.33.0（默认节点镜像 v1.37.0）跨度较大，已改为使用 kind 默认镜像；
+#      需要固定版本时见下方注释。
+#
+# ── 镜像来源的三种方案（按推荐顺序）────────────────────────────────────
+#   ① 预加载（最快，无需改配置）
+#        docker pull nginx:1.27
+#        kind load docker-image nginx:1.27 --name kind-mirror
+#   ② 本地镜像仓库（多节点环境首选）
+#        见同目录 kind-config-registry.yaml
+#   ③ 镜像加速地址（本文件的用途）
+#        登录阿里云容器镜像服务控制台获取当前有效的专属加速地址，
+#        或使用自建 Harbor / Nexus，然后取消下方注释并替换地址
+#
+#   注意：公共第三方加速站（dockerproxy、各类镜像站）可用性变化频繁，
+#         CI 与团队环境请使用方案 ①/② 或自有仓库，避免流水线随机失败。
+# ============================================================================
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+name: kind-mirror
+
+# ── 镜像加速配置 ────────────────────────────────────────────────────────────
+# 取消注释并把 <你的镜像加速地址> 替换为有效地址后生效（需重建集群）。
+# 校验是否生效：docker exec -it kind-mirror-control-plane \
+#                 cat /etc/containerd/config.toml | grep -A2 mirrors
+# containerdConfigPatches:
+#   - |-
+#     [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+#       endpoint = ["https://<你的镜像加速地址>"]
+
+# 可选：网络配置（默认值，一般无需修改）
+# networking:
+#   podSubnet: "10.244.0.0/16"
+#   serviceSubnet: "10.96.0.0/12"
+
+nodes:
+  # 1 控制面 + 3 worker
+  - role: control-plane
+    # 需要固定节点镜像时取消注释（digest 见 README 附录 14.3）。
+    # ⚠️ 节点镜像版本应与所使用的 kind 版本匹配，过旧的镜像可能导致引导失败。
+    # image: kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5
+    # 端口映射：便于从宿主机访问节点（避免占用 80/443）
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 8080
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 8443
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+  - role: worker
+  - role: worker
+  - role: worker

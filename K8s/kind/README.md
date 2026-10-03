@@ -325,16 +325,17 @@ kubeadmConfigPatches:
 
 | 文件 | 拓扑 | 特征 |
 |---|---|---|
-| [`../kind-4nodes.yaml`](../kind-4nodes.yaml) | 1 控制面 + 3 worker | 最简多节点练习配置 |
+| [`kind-4nodes.yaml`](kind-4nodes.yaml) | 1 控制面 + 3 worker | 最简多节点练习配置 |
 | [`kind-ha.yaml`](kind-ha.yaml) | 2 控制面 + 3 worker | 多控制面，且每个节点配置了 80/443/30080/30443 端口映射（宿主机端口各不相同） |
-| [`kind-test.yaml`](kind-test.yaml) | 1 控制面 + 2 worker | 自定义网段、`disableDefaultCNI: true`、`kubeProxyMode: ipvs`、固定 API 端口 6443 |
 | [`kind-config-single.yaml`](kind-config-single.yaml) | 1 控制面（可调度） | 最小可用配置 + 80/443 映射，用于 Ingress 练习 |
 | [`kind-config-registry.yaml`](kind-config-registry.yaml) | 1 控制面 + 2 worker | 带本地镜像仓库（`localhost:5001`）+ Ingress 端口映射 |
+| [`kind-mirror.yaml`](kind-mirror.yaml) | 1 控制面 + 3 worker | 镜像加速（registry mirror）模板 + 8080/8443 端口映射 |
+| [`kind-test.yaml`](kind-test.yaml) | 1 控制面 + 2 worker | 自定义网段、`disableDefaultCNI: true`、`kubeProxyMode: ipvs`、固定 API 端口 6443 |
 
 **1 控制面 + 3 worker（最常用）：**
 
 ```bash
-kind create cluster --config ../kind-4nodes.yaml
+kind create cluster --config kind-4nodes.yaml
 kubectl get nodes
 ```
 
@@ -574,7 +575,7 @@ containerdConfigPatches:
 
 ### 7.3 镜像加速（国内环境）
 
-节点内拉取 Docker Hub 镜像较慢时，可通过 `containerdConfigPatches` 配置加速地址，本仓库 [`kind-test.yaml`](kind-test.yaml) 就是这种写法：
+节点内拉取 Docker Hub 镜像较慢时，可通过 `containerdConfigPatches` 配置加速地址，本目录的 [`kind-mirror.yaml`](kind-mirror.yaml) 提供了这种写法的模板：
 
 ```yaml
 containerdConfigPatches:
@@ -583,10 +584,12 @@ containerdConfigPatches:
       endpoint = ["https://<你的加速地址>"]
 ```
 
-> ⚠️ **注意**：`kind-test.yaml` 中的 `https://0ebrf618.mirror.aliyuncs.com` 是**账号专属的阿里云加速地址**（形如 `<随机串>.mirror.aliyuncs.com`），通常已失效，且第三方镜像站可用性变化频繁。建议：
-> - 优先使用 7.2 的本地 registry 方案（把镜像 `docker pull` + `push` 到本地仓库）
-> - 或改用 `kind load docker-image` 直接导入
-> - 若坚持用加速地址，请登录阿里云容器镜像服务控制台获取当前有效的专属地址
+> ⚠️ **关于加速地址的坑**：仓库早期版本的 `kind-test.yaml`（已收拢重写为 [`kind-mirror.yaml`](kind-mirror.yaml)）中曾写死 `https://0ebrf618.mirror.aliyuncs.com`。这是**阿里云容器镜像服务的账号专属加速地址**（形如 `<随机串>.mirror.aliyuncs.com`），会随账号与时间失效，且第三方公共镜像站可用性变化频繁 —— 写死后容易导致「集群能建、镜像拉不下来」的隐蔽故障。
+>
+> 因此现在按以下优先级选择：
+> 1. **预加载镜像**：`docker pull` + `kind load docker-image`（最快，无需改配置）
+> 2. **本地镜像仓库**：见 [7.2 节](#72-使用本地镜像仓库推荐用于多节点)（多节点环境首选）
+> 3. **加速地址**：登录阿里云容器镜像服务控制台获取当前有效地址，或使用自建 Harbor / Nexus，再取消 `kind-mirror.yaml` 中相应注释
 
 ---
 
@@ -1020,7 +1023,7 @@ kind build node-image --image my-node:v1 .
 | v1.34.11 | `kindest/node:v1.34.11@sha256:44e222ee2132dab25ff87301682f89eb82c7880ea3a1bf543bfe9708fd08d67d` |
 
 > ⚠️ 节点镜像必须与宿主机架构一致（amd64 / arm64），且必须使用 `@sha256` digest 才能保证拿到对应版本的镜像。
-> 本仓库的 [`kind-test.yaml`](kind-test.yaml) 中固定的是较老的 `v1.27.3`，如需新版本请替换该行。
+> 节点镜像版本应与所用 kind 版本匹配：kind v0.33.0 对应上表的 v1.34~v1.37；过旧的镜像（例如 v1.27.x）与新版 kind 组合可能出现引导失败，请勿沿用。
 
 ### 14.4 路径与文件速查
 
@@ -1036,15 +1039,19 @@ kind build node-image --image my-node:v1 .
 
 ### 14.5 本目录文件说明
 
+本目录已收拢全部 kind 集群配置（原 `K8s/` 根目录下的两个配置文件已迁入）：
+
 | 文件 | 说明 |
 |---|---|
 | [`README.md`](README.md) | 本文档，kind 部署全流程指南 |
+| [`kind-4nodes.yaml`](kind-4nodes.yaml) | 1 控制面 + 3 worker，最简多节点配置 |
 | [`kind-ha.yaml`](kind-ha.yaml) | 2 控制面 + 3 worker，含各节点独立端口映射（HA 练习） |
-| [`kind-test.yaml`](kind-test.yaml) | 1 控制面 + 2 worker，自定义网段、ipvs 模式、固定 API 端口 |
 | [`kind-config-single.yaml`](kind-config-single.yaml) | 单节点 + 80/443 映射，用于 Ingress 最小练习 |
-| [`kind-config-registry.yaml`](kind-config-registry.yaml) | 单控制面 + 2 worker + 本地镜像仓库 + Ingress 端口映射 |
+| [`kind-config-registry.yaml`](kind-config-registry.yaml) | 1 控制面 + 2 worker + 本地镜像仓库（`localhost:5001`）+ 端口映射 |
+| [`kind-mirror.yaml`](kind-mirror.yaml) | 1 控制面 + 3 worker，镜像加速（registry mirror）模板 + 8080/8443 映射 |
+| [`kind-test.yaml`](kind-test.yaml) | 1 控制面 + 2 worker，自定义网段、ipvs 模式、固定 API 端口 6443 |
 
-> 📌 另有两个根目录配置文件：[`../kind-4nodes.yaml`](../kind-4nodes.yaml)（1 控制面 + 3 worker，最简多节点）与 [`../kind-test.yaml`](../kind-test.yaml)（1 控制面 + 3 worker + 镜像加速）。后续可考虑统一收拢到本目录，避免同名文件混淆。
+命名说明：`kind-test.yaml` 由早期实验保留至今（内容是 ipvs 与自定义网段实验），与本文档其他「按用途命名」的文件不同，如需可自行改名为 `kind-ipvs.yaml` 等更清晰的名字。
 
 ### 14.6 参考链接
 
