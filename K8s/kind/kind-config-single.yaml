@@ -1,0 +1,54 @@
+# ============================================================================
+# kind 单节点集群配置（最小可用 + Ingress 端口映射）
+#
+# 用途：本地快速验证、Ingress 练习、CI
+# 使用：kind create cluster --config kind-config-single.yaml
+#       kind delete cluster --name kind-single
+#
+# 说明：kind 默认不给控制面节点加 NoSchedule 污点（与 kubeadm 默认行为不同），
+#       因此单节点集群可直接调度业务 Pod。
+#       可用以下命令确认，如确认存在污点则按需去除或改为容忍：
+#         kubectl describe node kind-single-control-plane | grep Taints
+#         kubectl taint node kind-single-control-plane node-role.kubernetes.io/control-plane-
+# 基准版本：kind v0.33.0（默认节点镜像 kindest/node:v1.37.0）
+# ============================================================================
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+# 集群名，对应 kubectl 上下文 kind-single
+name: kind-single
+
+nodes:
+  - role: control-plane
+
+    # 通过 kubeadm 补丁自动给节点打上 ingress-ready 标签，
+    # ingress-nginx 的 kind 专用清单依赖该标签做 nodeSelector。
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+
+    # 宿主机 ↔ 节点容器端口映射
+    # ⚠️ hostPort 80/443 若被占用（Windows 上常见：IIS、其他 Web 服务、
+    #    Docker Desktop 自身），请改成 8080/8443 后重建集群。
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        listenAddress: "0.0.0.0"    # 0.0.0.0 允许局域网访问；仅本机可改 127.0.0.1
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+
+# 可选：网络配置（默认值如下，一般无需修改）
+# networking:
+#   ipFamily: ipv4
+#   apiServerAddress: "127.0.0.1"   # 改为 0.0.0.0 可供局域网访问 API
+#   apiServerPort: 6443             # 固定端口；同机多集群时必须错开
+#   podSubnet: "10.244.0.0/16"
+#   serviceSubnet: "10.96.0.0/12"
+#   kubeProxyMode: "iptables"       # 可改 ipvs / nftables

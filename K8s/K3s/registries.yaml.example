@@ -1,0 +1,75 @@
+# ============================================================================
+# K3s 镜像仓库配置模板
+# 生效路径：/etc/rancher/k3s/registries.yaml
+#           Server 与 Agent 节点都需要放置该文件
+# 修改后生效：sudo systemctl restart k3s        （Server）
+#             sudo systemctl restart k3s-agent  （Agent）
+#
+# 重要说明：
+#   1. 本文件仅作用于 K3s 内置的 containerd，与宿主机 Docker 的
+#      /etc/docker/daemon.json 互不影响。
+#   2. K3s 会把该配置转换为 containerd 的 hosts.toml，生成位置：
+#      /var/lib/rancher/k3s/agent/etc/containerd/certs.d/<registry>/hosts.toml
+#   3. endpoint 必须带协议头（https:// 或 http://）。
+#   4. 下方镜像加速地址仅为示例格式，第三方镜像站的可用性会随时变化，
+#      请自行验证后再使用；生产环境建议自建 Harbor / Nexus。
+# 基准版本：K3s v1.37.1+k3s1（containerd v2.3.4-k3s1）
+# ============================================================================
+
+mirrors:
+  # ── Docker Hub 加速 ──────────────────────────────────────────────────────
+  docker.io:
+    endpoint:
+      - "https://docker.m.daocloud.io"
+      # - "https://hub-mirror.c.163.com"
+    # 若镜像站的路径结构与 Docker Hub 不一致，可追加 rewrite 规则
+    # rewrite:
+    #   "^registry-1.docker.io": "docker.m.daocloud.io"
+
+  # ── 根据镜像站需要，也可为 gcr.io / ghcr.io / quay.io 配置加速 ──────────
+  # ghcr.io:
+  #   endpoint:
+  #     - "https://ghcr.nju.edu.cn"
+
+  # ── 自建私有仓库（Harbor）──────────────────────────────────────────────
+  harbor.example.com:
+    endpoint:
+      - "https://harbor.example.com"
+
+configs:
+  # ── 私有仓库认证与 TLS ──────────────────────────────────────────────────
+  "harbor.example.com":
+    auth:
+      username: "admin"
+      password: "your-password"        # 建议使用机器人账号 + 最小权限
+    tls:
+      # 使用自签证书时，把 CA 证书放到该路径（所有节点都要有）
+      ca_file: "/etc/rancher/k3s/harbor-ca.crt"
+      # 跳过证书校验：仅限测试环境，生产环境请勿开启
+      insecure_skip_verify: false
+    # 若 Harbor 使用了非标准端口，需在 endpoint 中显式写明，例如：
+    # endpoint:
+    #   - "https://harbor.example.com:8443"
+
+# ============================================================================
+# 验证配置是否生效
+# ----------------------------------------------------------------------------
+#   # 1) 查看 containerd 生成的 hosts 配置
+#   sudo cat /var/lib/rancher/k3s/agent/etc/containerd/certs.d/docker.io/hosts.toml
+#
+#   # 2) 拉取测试
+#   sudo k3s crictl pull nginx:latest
+#   sudo k3s crictl images | grep nginx
+#
+#   # 3) 查看 K3s 启动日志中的 registry 相关输出
+#   sudo journalctl -u k3s | grep -i registry
+#
+# 常见问题
+# ----------------------------------------------------------------------------
+#   · x509: certificate signed by unknown authority
+#       → 自签证书未提供 ca_file，或 ca_file 路径在节点上不存在
+#   · 401 Unauthorized
+#       → configs 中的仓库地址与 mirrors 中的键名必须完全一致
+#   · 拉取仍然走公网
+#       → 检查 endpoint 协议头、确认已重启服务、确认镜像名未带其他 registry 前缀
+# ============================================================================

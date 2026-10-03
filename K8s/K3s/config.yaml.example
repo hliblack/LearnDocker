@@ -1,0 +1,113 @@
+# ============================================================================
+# K3s Server 配置文件模板
+# 生效路径：/etc/rancher/k3s/config.yaml
+# 使用方法：sudo cp config.yaml.example /etc/rancher/k3s/config.yaml
+#           sudo vim /etc/rancher/k3s/config.yaml
+#           curl -sfL https://get.k3s.io | sh -
+# 修改后生效：sudo systemctl restart k3s
+#
+# 格式规则：键名 = 命令行参数去掉 "--" 前缀；列表型参数写成 YAML 数组。
+#           完整参数列表：k3s server --help
+# 基准版本：K3s v1.37.1+k3s1
+# ============================================================================
+
+# ── 基础设置 ────────────────────────────────────────────────────────────────
+# 允许非 root 用户读取 kubeconfig（便于复制到客户端；注意该文件含集群管理员权限）
+write-kubeconfig-mode: "0644"
+
+# 节点名称与集群通信 IP（多网卡主机务必显式指定，否则可能选错网卡）
+node-name: "k3s-server-1"
+node-ip: "192.168.31.101"
+
+# 用于集群内 Pod 通信的网卡（虚拟机 / NAS / 存在 docker0 时强烈建议指定）
+flannel-iface: "eth0"
+
+# 证书 SAN：客户端访问集群所用的地址必须在此列出，否则报 x509 证书错误
+# 至少包含：本机 IP、VIP、对外域名
+tls-san:
+  - "192.168.31.101"
+  - "192.168.31.100"      # kube-vip / 负载均衡 VIP
+  - "k3s.example.com"     # 对外域名（可选）
+
+# ── 数据目录 ────────────────────────────────────────────────────────────────
+# 默认 /var/lib/rancher/k3s；如系统盘空间不足可改到大容量磁盘
+# 注意：修改后需保证目录已存在且权限正确（0700, root）
+# data-dir: "/var/lib/rancher/k3s"
+
+# ── 高可用（HA / 嵌入式 etcd）──────────────────────────────────────────────
+# 【第 1 台 Server】初始化新的 etcd 集群，取消下面一行注释
+# cluster-init: true
+
+# 【第 2、3 台 Server】加入已有集群：指向第 1 台的地址（不要用 --cluster-init）
+# server: "https://192.168.31.101:6443"
+
+# 加入集群所需的 Token（第 1 台上位于 /var/lib/rancher/k3s/server/node-token）
+# token: "K10abcdef1234567890::server:9f8e7d6c5b4a3210"
+
+# ── 组件开关 ────────────────────────────────────────────────────────────────
+# 按需禁用内置组件。可选项（以 k3s server --help 为准）：
+#   coredns / servicelb / traefik / local-storage / metrics-server / network-policy
+# 常见组合：
+#   · 使用 ingress-nginx 替代 Traefik  → 禁用 traefik + servicelb（避免 80/443 冲突）
+#   · 使用 Cilium/Calico 等自建 CNI    → 见文件末尾「自建 CNI」段落
+# disable:
+#   - traefik
+#   - servicelb
+
+# 单独禁用某项内置能力的写法（等价于 --disable-kube-proxy 等）
+# disable-kube-proxy: true
+# disable-network-policy: true
+# disable-cloud-controller: true
+# disable-helm-controller: true
+
+# ── 安全 ────────────────────────────────────────────────────────────────────
+# RHEL / CentOS / Rocky 等启用 SELinux 的系统需开启（需先安装 k3s-selinux）
+# selinux: true
+
+# 开启 Secret 静态加密（推荐；开启后用 k3s secrets-encrypt status 查看）
+# secrets-encryption: true
+
+# ── etcd 自动快照 ───────────────────────────────────────────────────────────
+# 每 12 小时打一次快照，保留 7 份
+# etcd-snapshot-schedule-cron: "0 */12 * * *"
+# etcd-snapshot-retention: 7
+# etcd-snapshot-dir: "/var/lib/rancher/k3s/server/db/snapshots"
+
+# 上传快照到 S3 兼容对象存储（MinIO / 阿里云 OSS 等）
+# etcd-s3: true
+# etcd-s3-endpoint: "s3.example.com"
+# etcd-s3-bucket: "k3s-backup"
+# etcd-s3-access-key: "your-access-key"
+# etcd-s3-secret-key: "your-secret-key"
+# etcd-s3-skip-ssl-verify: false
+
+# ── 节点标签与污点 ──────────────────────────────────────────────────────────
+# 给 Server 节点打标签（也可安装后用 kubectl label 追加）
+# node-label:
+#   - "node-role=control-plane"
+#   - "topology.zone=home"
+
+# 若希望 Server 只做控制面、不跑业务 Pod，添加污点
+# node-taint:
+#   - "node-role.kubernetes.io/control-plane=true:NoSchedule"
+
+# ── kubelet / apiserver 自定义参数 ─────────────────────────────────────────
+# kubelet-arg:
+#   - "max-pods=200"
+#   - "image-gc-high-threshold=80"
+# kube-apiserver-arg:
+#   - "audit-log-path=/var/lib/rancher/k3s/audit.log"
+#   - "audit-log-maxage=7"
+
+# ── 自建 CNI（Cilium / Calico）：三件套必须同时配置 ────────────────────────
+# flannel-backend: "none"
+# disable-network-policy: true
+# disable-kube-proxy: true
+# disable:
+#   - servicelb
+
+# ── OIDC 认证 / 审计日志（企业环境）────────────────────────────────────────
+# kube-apiserver-arg:
+#   - "oidc-issuer-url=https://oidc.example.com"
+#   - "oidc-client-id=kubernetes"
+#   - "oidc-username-claim=email"

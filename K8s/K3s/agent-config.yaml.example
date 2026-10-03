@@ -1,0 +1,54 @@
+# ============================================================================
+# K3s Agent（工作节点）配置文件模板
+# 生效路径：/etc/rancher/k3s/config.yaml（Agent 与 Server 使用同一路径，按角色解析）
+# 使用方法：sudo cp agent-config.yaml.example /etc/rancher/k3s/config.yaml
+#           curl -sfL https://get.k3s.io | sh -
+# 修改后生效：sudo systemctl restart k3s-agent
+#
+# 说明：以下参数也可用环境变量传入（K3S_URL / K3S_TOKEN / K3S_NODE_NAME），
+#       但配置文件方式更利于版本化管理。
+# 基准版本：K3s v1.37.1+k3s1
+# ============================================================================
+
+# ── 必填：加入集群 ──────────────────────────────────────────────────────────
+# Server 地址。HA 集群请填写 VIP / 负载均衡地址，而不是某一台 Server 的 IP，
+# 否则该 Server 故障后 Agent 将无法重连。
+server: "https://192.168.31.100:6443"
+
+# 集群 Token，取自 Server 节点：
+#   sudo cat /var/lib/rancher/k3s/server/node-token
+# 输出形如：K10abcdef1234567890::server:9f8e7d6c5b4a3210
+token: "K10abcdef1234567890::server:9f8e7d6c5b4a3210"
+
+# ── 节点标识 ────────────────────────────────────────────────────────────────
+node-name: "k3s-agent-1"
+node-ip: "192.168.31.111"
+
+# 集群通信网卡（多网卡 / 虚拟机环境务必指定）
+flannel-iface: "eth0"
+
+# ── 数据目录 ────────────────────────────────────────────────────────────────
+# 默认 /var/lib/rancher/k3s（镜像、容器数据都在这里，建议放在大容量磁盘）
+# data-dir: "/var/lib/rancher/k3s"
+
+# ── 节点标签（用于定向调度）────────────────────────────────────────────────
+node-label:
+  - "node-role=worker"
+  - "topology.zone=home"
+  - "disktype=ssd"
+
+# 节点污点（让特定 Pod 才能调度到本节点）
+# node-taint:
+#   - "gpu=true:NoSchedule"
+
+# ── 容器运行时 / kubelet 调优 ──────────────────────────────────────────────
+# kubelet-arg:
+#   - "max-pods=200"
+#   - "image-gc-high-threshold=85"
+#   - "image-gc-low-threshold=70"
+
+# 私有镜像仓库地址（若为私有仓库且证书自签，见 registries.yaml.example）
+# private-registry: "/etc/rancher/k3s/registries.yaml"
+
+# ── 其他 ────────────────────────────────────────────────────────────────────
+# Agent 侧不需要配置 tls-san / cluster-init / etcd 快照等参数（这些属于 Server）

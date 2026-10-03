@@ -1,0 +1,55 @@
+# ============================================================================
+# kind 集群配置：本地镜像仓库 + Ingress 端口映射
+#
+# 用途：多节点环境下避免逐节点 kind load 镜像；验证私有仓库拉取流程
+# 使用：
+#   ① 先启动 registry 容器（必须先于集群创建）
+#      docker run -d --restart=always -p "127.0.0.1:5001:5000" \
+#        --network bridge --name kind-registry registry:2
+#   ② 创建集群
+#      kind create cluster --config kind-config-registry.yaml
+#   ③ 把 registry 接入 kind 网络（使节点能按容器名解析）
+#      docker network connect kind kind-registry
+#   ④ 推送镜像（宿主机 Docker → 本地仓库）
+#      docker tag myapp:v1 localhost:5001/myapp:v1
+#      docker push localhost:5001/myapp:v1
+#   ⑤ Pod 直接引用 localhost:5001/myapp:v1
+#
+# 说明：镜像名前缀 localhost:5001 是「宿主机暴露端口」，节点内实际访问的是
+#       Docker 网络里的 http://kind-registry:5000，两者端口不同是刻意设计。
+# 基准版本：kind v0.33.0（默认节点镜像 kindest/node:v1.37.0）
+# ============================================================================
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+name: kind-registry
+
+# 让节点内的 containerd 把 localhost:5001 指向本地 registry 容器
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5001"]
+      endpoint = ["http://kind-registry:5000"]
+
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    # Ingress 端口映射：使用 8080/8443 避开宿主机 80/443 常见占用
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 8080
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 8443
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+
+  # 工作节点：验证镜像在「非控制面节点」上也能从本地仓库正常拉取
+  - role: worker
+  - role: worker

@@ -1,6 +1,6 @@
 # LearnDocker
 
-Docker 与 Kubernetes 学习仓库：包含常用自托管应用的 docker-compose 编排实战、Dockerfile 参考源码，以及 K8s 基础对象、kind 集群与 Helm 的入门练习。
+Docker 与 Kubernetes 学习仓库：包含常用自托管应用的 docker-compose 编排实战、Dockerfile 参考源码，以及 K8s 基础对象、kind 本地集群、K3s 集群部署与 Helm 的入门练习。
 
 ## 📁 目录结构
 
@@ -14,7 +14,8 @@ LearnDocker/
 │       └── containers-main/     # （不入库）Bitnami containers 仓库快照
 └── K8s/
     ├── yaml/                    # K8s 基础对象练习：Pod / Deployment / StatefulSet / DaemonSet / CronJob / PV
-    ├── kind-yaml/               # kind 本地集群配置（4 节点、HA）
+    ├── kind/                    # kind 本地集群：部署文档 + 集群配置（多节点、HA）
+    ├── K3s/                     # K3s 集群部署文档与配置模板（单节点 / 多节点 / HA）
     ├── helm/                    # Jenkins 的 Helm values 自定义
     ├── charts-main/             # （不入库）Bitnami charts 仓库快照
     ├── nfs-pv.yaml / nfs-pvc*.yaml   # NFS 存储练习
@@ -58,13 +59,32 @@ git clone --depth 1 https://github.com/bitnami/charts.git K8s/charts-main
 
 ### kind 本地集群
 
+用 Docker 容器模拟 K8s 节点，无需真实服务器即可搭建多节点集群，详细文档见 **[K8s/kind/README.md](K8s/kind/README.md)**。
+
 ```bash
 # 1 控制面 + 3 worker
 kind create cluster --config K8s/kind-4nodes.yaml
 
-# 高可用集群（多控制面）
-kind create cluster --config K8s/kind-yaml/kind-ha.yaml
+# 高可用集群（多控制面 + 端口映射）
+kind create cluster --config K8s/kind/kind-ha.yaml
+
+# 单节点 + Ingress 端口映射
+kind create cluster --config K8s/kind/kind-config-single.yaml
+
+# 查看 / 删除
+kind get clusters
+kind delete cluster --name kind-ha
 ```
+
+可用集群配置：
+
+| 文件 | 拓扑 |
+|---|---|
+| [K8s/kind-4nodes.yaml](K8s/kind-4nodes.yaml) | 1 控制面 + 3 worker（最简） |
+| [K8s/kind/kind-ha.yaml](K8s/kind/kind-ha.yaml) | 2 控制面 + 3 worker（多控制面） |
+| [K8s/kind/kind-config-single.yaml](K8s/kind/kind-config-single.yaml) | 单节点 + 80/443 映射 |
+| [K8s/kind/kind-config-registry.yaml](K8s/kind/kind-config-registry.yaml) | 本地镜像仓库 + 2 worker |
+| [K8s/kind/kind-test.yaml](K8s/kind/kind-test.yaml) | 自定义网段 / ipvs / 固定 API 端口 |
 
 ### 基础对象
 
@@ -72,6 +92,27 @@ kind create cluster --config K8s/kind-yaml/kind-ha.yaml
 kubectl apply -f K8s/yaml/                 # Pod / Deployment / StatefulSet / DaemonSet / CronJob
 kubectl apply -f K8s/nfs-pv.yaml           # NFS PV/PVC 存储
 ```
+
+### K3s 集群部署
+
+轻量级生产可用集群，支持单节点 / 多节点 / 高可用（嵌入式 etcd）三种拓扑，详细文档见 **[K8s/K3s/README.md](K8s/K3s/README.md)**。
+
+```bash
+# 单节点快速起步（Linux 主机执行）
+curl -sfL https://get.k3s.io | sh -
+sudo k3s kubectl get nodes
+
+# 高可用集群的第 1 台 Server
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --cluster-init --tls-san <VIP>" sh -
+```
+
+配套配置模板：
+
+| 文件 | 用途 |
+|---|---|
+| [K8s/K3s/config.yaml.example](K8s/K3s/config.yaml.example) | Server 配置（HA、组件开关、etcd 快照） |
+| [K8s/K3s/agent-config.yaml.example](K8s/K3s/agent-config.yaml.example) | Agent 配置（加入集群、节点标签） |
+| [K8s/K3s/registries.yaml.example](K8s/K3s/registries.yaml.example) | 镜像加速与私有仓库认证 |
 
 ### Helm 部署 Jenkins
 
